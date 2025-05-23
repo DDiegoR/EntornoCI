@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  python: circleci/python@3.13.3
+  python: circleci/python@3.0.0
 jobs:
   build_and_test: # this can be any name you choose
     executor: python/default # use the default executor defined within the orb

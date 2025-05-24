@@ -1,43 +1,38 @@
-version: 2.1
+version: 2.1  # is the latest CircleCI version
+
+orbs:
+  python: circleci/python@3.1.0 # orb contains a set of prepackaged CircleCI configurations you can use to do common CircleCI tasks for the Python programming language.
+  slack: circleci/slack@5.1.1
 
 jobs:
-  test:
-    docker:
-      - image: cimg/python:3.11  # Imagen oficial de CircleCI con Python
-    steps:
-      - checkout  # Clona tu repo
-      
-      - run:
-          name: Instalar dependencias
-          command: |
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
+  build_and_test: # this can be any name you choose
+  executor: python/default # use the defaul executor defined within the orb
+  steps:
+    - checkout # checkout source code
+    - python/install-packages:
+      pkg-manager: pip
+    - run:
+      name: Run test
+      command: python -m pytest
+    - persist_to_workspace:
+      root: ~/project
+      paths:
+        - .
 
-      - run:
-          name: Ejecutar tests
-          command: |
-            pytest
-            RESULT=$?
-              if [ $RESULT -eq 0 ]; then
-                STATUS="✅ Tests pasaron correctamente"
-              else
-                STATUS="❌ Tests fallaron"
-              fi
-              curl -X POST -H 'Content-type: application/json' \
-                --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
-                $SLACK_WEBHOOK_URL
-              exit $RESULT  # devolver el estado correcto a CircleCI
-
-  deploy_staging:
+  notify:
+    context: slack_secrets
     docker:
-      - image: cimg/node:18.17
+      - image: cimg/base:current
     steps:
-      - checkout
-      - run: npm install -g firebase-tools
-      - run: firebase deploy --project staging --token $FIREBASE_TOKEN
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+
 
 workflows:
-  version: 2
-  test-workflow:
+  build_test:
     jobs:
-      - test
+      - build_and_test

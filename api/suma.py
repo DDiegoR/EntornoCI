@@ -8,4 +8,4 @@ app = Flask(__name__)
 def suma():
     a = int(request.args.get("a", 0))
     b = int(request.args.get("b", 0))
-    return jsonify({"resultado es": a + b})
+    return jsonify({"resultado": a + b})

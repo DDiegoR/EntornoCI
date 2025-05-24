@@ -10,14 +10,14 @@ jobs:
     steps:
       - checkout # checkout source code
       - python/install-packages:
-        pkg-manager: pip
+          pkg-manager: pip
       - run:
-        name: Run test
-        command: python -m pytest
+          name: Run test
+          command: python -m pytest
       - persist_to_workspace:
-        root: ~/project
-        paths:
-          - .
+          root: ~/project
+          paths:
+            - .
 
   notify_slack:
     docker:

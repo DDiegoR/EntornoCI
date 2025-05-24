@@ -13,23 +13,23 @@ jobs:
           pkg-manager: pip
       - run:
           name: Run test
-          command: python -m pytest
+          command: |
+            python -m pytest
+            RESULT=$?
+              if [ $RESULT -eq 0 ]; then
+                STATUS="✅ Tests pasaron correctamente"
+              else
+                STATUS="❌ Tests fallaron"
+              fi
+              curl -X POST -H 'Content-type: application/json' \
+                --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
+                $SLACK_WEBHOOK_URL
+              exit $RESULT  # devolver el estado correcto a CircleCI
       - persist_to_workspace:
           root: ~/project
           paths:
             - .
-      - run:
-          name: Notificar a Slack
-          when: always  # Ejecuta esto incluso si el test falla
-          command: |
-            if [ "$CIRCLE_JOB_STATUS" = "success" ]; then
-              STATUS="✅ Tests pasaron correctamente"
-            else
-              STATUS="❌ Tests fallaron"
-            fi
-            curl -X POST -H 'Content-type: application/json' \
-              --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
-              $SLACK_WEBHOOK_URL
+
   deploy:
     docker:
       - image: cimg/python:3.9-node

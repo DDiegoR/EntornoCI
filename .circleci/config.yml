@@ -19,6 +19,27 @@ jobs:
           paths:
             - .
 
+  deploy:
+    executor: python-executor
+    steps:
+      - checkout
+
+      - run:
+          name: Instalar Firebase CLI
+          command: npm install -g firebase-tools
+
+      - run:
+          name: Instalar dependencias Python
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+
+      - run:
+          name: Desplegar funciones a Firebase
+          command: |
+            firebase deploy --only functions --project entornoci --token $FIREBASE_TOKEN
+
   notify_slack:
     docker:
       - image: cimg/base:current
@@ -36,6 +57,9 @@ workflows:
   build_test:
     jobs:
       - build_and_test
+      - deploy:
+          requires:
+            - build_and_test
       - notify_slack:
           requires:
             - build_and_test

@@ -1,1 +1,2 @@
 pytest
+functions-framework

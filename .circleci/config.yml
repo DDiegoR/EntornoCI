@@ -20,7 +20,7 @@ jobs:
             - .
 
   deploy:
-    executor: python-executor
+    executor: python/default
     steps:
       - checkout
 

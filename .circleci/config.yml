@@ -14,19 +14,22 @@ jobs:
       - run:
           name: Run test
           command: python -m pytest
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
       - persist_to_workspace:
           root: ~/project
           paths:
             - .
       - run:
-          name: Comprobar Slack Webhook
-          command: echo $SLACK_WEBHOOK_URL
+          name: Notificar a Slack
+          when: always  # Ejecuta esto incluso si el test falla
+          command: |
+            if [ "$CIRCLE_JOB_STATUS" = "success" ]; then
+              STATUS="✅ Tests pasaron correctamente"
+            else
+              STATUS="❌ Tests fallaron"
+            fi
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
+              $SLACK_WEBHOOK_URL
   deploy:
     docker:
       - image: cimg/python:3.9-node

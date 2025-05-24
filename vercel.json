@@ -1,0 +1,17 @@
+{
+  "builds": [
+    {
+      "src": "api/suma.py",
+      "use": "@vercel/python",
+      "config": {
+        "python": "3.10"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)", 
+      "dest": "api/suma.py"
+    }
+  ]
+}

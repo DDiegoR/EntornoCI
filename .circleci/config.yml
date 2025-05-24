@@ -39,10 +39,10 @@ jobs:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
       - run:
-          name: Install Python 3.12
+          name: Install Python 3.9
           command: |
             sudo apt-get update
-            sudo apt-get install -y python3.12 python3.12-venv python3-pip
+            sudo apt-get install -y python3.9 python3.9-venv python3-pip
       
       - run:
           name: Pull Vercel Environment Information
@@ -64,10 +64,10 @@ jobs:
           command: sudo npm install --global vercel@latest
 
       - run:
-          name: Install Python 3.12
+          name: Install Python 3.9
           command: |
             sudo apt-get update
-            sudo apt-get install -y python3.12 python3.12-venv python3-pip
+            sudo apt-get install -y python3.9 python3.9-venv python3-pip
       - run:
           name: Pull Vercel Environment Information
           command: vercel pull --yes --environment=production --token=$VERCEL_TOKEN

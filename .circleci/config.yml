@@ -15,19 +15,18 @@ jobs:
 
       - run:
           name: Ejecutar tests
-          command: pytest
-
-      - run:
-          name: Enviar notificación Slack
           command: |
-            if [ "${CIRCLE_JOB_STATUS}" = "Success" ]; then
-              STATUS="✅ Tests pasaron correctamente"
-            else
-              STATUS="❌ Tests fallaron"
-            fi
-            curl -X POST -H 'Content-type: application/json' \
-              --data "{\"text\":\"$STATUS en *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
-              $SLACK_WEBHOOK_URL
+            pytest
+            RESULT=$?
+              if [ $RESULT -eq 0 ]; then
+                STATUS="✅ Tests pasaron correctamente"
+              else
+                STATUS="❌ Tests fallaron"
+              fi
+              curl -X POST -H 'Content-type: application/json' \
+                --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
+                $SLACK_WEBHOOK_URL
+              exit $RESULT  # devolver el estado correcto a CircleCI
 
 workflows:
   version: 2

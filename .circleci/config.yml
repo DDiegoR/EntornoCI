@@ -30,33 +30,60 @@ jobs:
           paths:
             - .
 
-  deploy:
+  preview_deployment:
     docker:
-      - image: cimg/python:3.9-node
+      - image: circleci/node:latest
+    environment:
+      VERCEL_ORG_ID: $VERCEL_ORG_ID
+      VERCEL_PROJECT_ID: $VERCEL_PROJECT_ID
     steps:
       - checkout
-
       - run:
-          name: Instalar Firebase CLI
-          command: npm install -g firebase-tools
-
+          name: Install Vercel CLI
+          command: npm install --global vercel@latest
       - run:
-          name: Instalar dependencias Python
-          command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-
+          name: Pull Vercel Environment Information
+          command: vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
       - run:
-          name: Desplegar funciones a Firebase
-          command: |
-            firebase deploy --only functions --project entornoci --token $FIREBASE_TOKEN
+          name: Build Project Artifacts
+          command: vercel build --token=$VERCEL_TOKEN
+      - run:
+          name: Deploy Project Artifacts to Vercel
+          command: vercel deploy --prebuilt --token=$VERCEL_TOKEN
+
+  production_deployment:
+    docker:
+      - image: circleci/node:latest
+    environment:
+      VERCEL_ORG_ID: $VERCEL_ORG_ID
+      VERCEL_PROJECT_ID: $VERCEL_PROJECT_ID
+    steps:
+      - checkout
+      - run:
+          name: Install Vercel CLI
+          command: npm install --global vercel@latest
+      - run:
+          name: Pull Vercel Environment Information
+          command: vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+      - run:
+          name: Build Project Artifacts
+          command: vercel build --prod --token=$VERCEL_TOKEN
+      - run:
+          name: Deploy Project Artifacts to Vercel
+          command: vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
 
 workflows:
   version: 2
   build_test:
     jobs:
       - build_and_test
-      - deploy:
-          requires:
-            - build_and_test
+      - preview_deployment: #The preview_deployment job will run when your code is pushed to a git branch other than main
+          requires: build_and_test
+          filters:
+            branches:
+              ignore: /main/
+      - production_deployment: #the production_deployment job will run when code is merged into the main branch.
+          requires: build_and_test
+          filters:
+            branches:
+              only: /main/

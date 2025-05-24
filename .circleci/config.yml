@@ -4,9 +4,6 @@ jobs:
   build:
     docker:
       - image: cimg/python:3.11  # Imagen oficial de CircleCI con Python
-    strategy:
-      matrix:
-        python-version: [3.12, 3.13]
     steps:
       - checkout  # Clona tu repo
       - run:

@@ -78,12 +78,14 @@ workflows:
     jobs:
       - build_and_test
       - preview_deployment: #The preview_deployment job will run when your code is pushed to a git branch other than main
-          requires: build_and_test
+          requires: 
+            - build_and_test
           filters:
             branches:
               ignore: /main/
       - production_deployment: #the production_deployment job will run when code is merged into the main branch.
-          requires: build_and_test
+          requires: 
+            - build_and_test
           filters:
             branches:
               only: /main/

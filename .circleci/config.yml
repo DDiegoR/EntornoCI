@@ -51,6 +51,9 @@ jobs:
       - slack/notify:
           event: pass
           template: basic_success_1
+      - run:
+          name: Comprobar Slack Webhook
+          command: echo $SLACK_WEBHOOK_URL
 
 
 workflows:
@@ -64,3 +67,4 @@ workflows:
       - notify_slack:
           requires:
             - build_and_test
+          when: always

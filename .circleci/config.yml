@@ -17,6 +17,20 @@ jobs:
           name: Ejecutar tests
           command: pytest
 
+      - run:
+          name: Notificar a Slack
+          when: always  # Ejecuta esto incluso si el test falla
+          command: |
+            if [ "$CIRCLE_JOB_STATUS" = "success" ]; then
+              STATUS="✅ Tests pasaron correctamente"
+            else
+              STATUS="❌ Tests fallaron"
+            fi
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
+              $SLACK_WEBHOOK_URL
+
+
 workflows:
   version: 2
   test-workflow:

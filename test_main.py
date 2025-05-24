@@ -5,7 +5,7 @@
 #    assert suma (-1,1) == 0
 
 
-from api.suma import app
+from app import app
 
 def test_suma():
     client = app.test_client()

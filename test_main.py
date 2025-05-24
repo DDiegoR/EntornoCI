@@ -5,7 +5,7 @@
 #    assert suma (-1,1) == 0
 
 
-from main import app, suma
+from api.suma import app, suma
 from flask import request
 
 def test_suma():

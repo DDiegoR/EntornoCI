@@ -14,10 +14,6 @@ jobs:
             pip install -r requirements.txt
 
       - run:
-          name: Desplegar a Firebase
-          command: firebase deploy --project staging --token $FIREBASE_TOKEN
-
-      - run:
           name: Ejecutar tests
           command: |
             pytest
@@ -31,6 +27,14 @@ jobs:
                 --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
                 $SLACK_WEBHOOK_URL
               exit $RESULT  # devolver el estado correcto a CircleCI
+
+  deploy_staging:
+    docker:
+      - image: cimg/node:18.17
+    steps:
+      - checkout
+      - run: npm install -g firebase-tools
+      - run: firebase deploy --project staging --token $FIREBASE_TOKEN
 
 workflows:
   version: 2

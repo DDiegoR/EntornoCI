@@ -11,4 +11,4 @@ from flask import request
 def test_suma():
     with app.test_request_context('/?a=2&b=3'):
         response = suma(request)
-        assert response.get_json() == {"resultado": 5}
+        assert response.get_json() == {"resultado es": 5}

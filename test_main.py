@@ -5,7 +5,7 @@
 #    assert suma (-1,1) == 0
 
 
-from app import app
+from wsgi import app
 
 def test_suma():
     client = app.test_client()

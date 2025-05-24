@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Enviar notificación Slack
           command: |
-            if [ "${CIRCLE_JOB_STATUS}" = "success" ]; then
+            if [ "${CIRCLE_JOB_STATUS}" = "Success" ]; then
               STATUS="✅ Tests pasaron correctamente"
             else
               STATUS="❌ Tests fallaron"

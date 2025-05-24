@@ -1,6 +1,5 @@
 #def suma(a,b):
     #return a + b
-import functions_framework
 from flask import request, jsonify, Flask
 
 app = Flask(__name__)

@@ -5,10 +5,11 @@
 #    assert suma (-1,1) == 0
 
 
-from api.suma import app, suma
-from flask import request
+from api.suma import app
 
 def test_suma():
-    with app.test_request_context('/?a=2&b=3'):
-        response = suma(request)
-        assert response.get_json() == {"resultado es": 5}
+    client = app.test_client()
+    response = client.get('/?a=2&b=3')
+    json_data = response.get_json()
+    assert response.status_code == 200
+    assert json_data["resultado"] == 5

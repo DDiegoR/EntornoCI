@@ -1,11 +1,12 @@
 version: 2.1
 
 jobs:
-  build:
+  test:
     docker:
       - image: cimg/python:3.11  # Imagen oficial de CircleCI con Python
     steps:
       - checkout  # Clona tu repo
+      
       - run:
           name: Instalar dependencias
           command: |

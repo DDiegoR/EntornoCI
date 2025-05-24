@@ -39,7 +39,7 @@ jobs:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
       - run:
-          name: Install Python 3.10
+          name: Install Python 3.10 and pip
           command: |
             sudo apt-get update
             sudo apt-get install -y python3.10 python3.10-venv python3-pip
@@ -64,7 +64,7 @@ jobs:
           command: sudo npm install --global vercel@latest
 
       - run:
-          name: Install Python 3.10
+          name: Install Python 3.10 and pip
           command: |
             sudo apt-get update
             sudo apt-get install -y python3.10 python3.10-venv python3-pip

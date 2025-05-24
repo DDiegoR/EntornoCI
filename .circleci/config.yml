@@ -17,6 +17,11 @@ jobs:
           name: Ejecutar tests
           command: pytest
 
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+            
   notify:
   docker:
     - image: cimg/base:stable

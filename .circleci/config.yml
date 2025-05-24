@@ -1,32 +1,37 @@
 version: 2.1
 
 jobs:
-  test:
+  build:
     docker:
       - image: cimg/python:3.11  # Imagen oficial de CircleCI con Python
+    strategy:
+      matrix:
+        python-version: [3.12, 3.13]
     steps:
-      - checkout  # Clona tu repo
+    #  - checkout  # Clona tu repo
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - run:
-          name: Instalar dependencias
-          command: |
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
-
-      - run:
-          name: Ejecutar tests
-          command: |
-            pytest
-            RESULT=$?
-              if [ $RESULT -eq 0 ]; then
-                STATUS="✅ Tests pasaron correctamente"
-              else
-                STATUS="❌ Tests fallaron"
-              fi
-              curl -X POST -H 'Content-type: application/json' \
-                --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
-                $SLACK_WEBHOOK_URL
-              exit $RESULT  # devolver el estado correcto a CircleCI
+    - name: Ejecutar tests
+      run: |
+          pytest
+          RESULT=$?
+            if [ $RESULT -eq 0 ]; then
+              STATUS="✅ Tests pasaron correctamente"
+            else
+              STATUS="❌ Tests fallaron"
+            fi
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
+              $SLACK_WEBHOOK_URL
+            exit $RESULT  # devolver el estado correcto a CircleCI
 
   deploy_staging:
     docker:

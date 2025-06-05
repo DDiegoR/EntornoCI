@@ -1,16 +1,18 @@
 version: 2.1  # is the latest CircleCI version
 
 orbs:
-  python: circleci/python@3.1.0 # orb contains a set of prepackaged CircleCI configurations you can use to do common CircleCI tasks for the Python programming language.
   slack: circleci/slack@5.1.1
 
 jobs:
   build_and_test: # this can be any name you choose
-    executor: python/default # use the defaul executor defined within the orb
+    docker:
+      - image: cimg/node:18.20.2
     steps:
       - checkout # checkout source code
-      - python/install-packages:
-          pkg-manager: pip
+      - run:
+          name: Instalar dependencias
+          command: npm install
+
       - run:
           name: Run test
           command: |
@@ -38,12 +40,7 @@ jobs:
       - run:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
-      - run:
-          name: Install Python 3.10 and pip
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y python3.10 python3.10-venv python3-pip
-      
+
       - run:
           name: Pull Vercel Environment Information
           command: vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
@@ -63,11 +60,6 @@ jobs:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
 
-      - run:
-          name: Install Python 3.10 and pip
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y python3.10 python3.10-venv python3-pip
       - run:
           name: Pull Vercel Environment Information
           command: vercel pull --yes --environment=production --token=$VERCEL_TOKEN

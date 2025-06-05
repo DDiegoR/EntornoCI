@@ -16,8 +16,10 @@ jobs:
       - run:
           name: Ejecutar test
           command: |
-            npm test || true
+            set +e
+            npm test
             RESULT=$?
+            set -e
             if [ $RESULT -eq 0 ]; then
               STATUS="✅ Tests pasaron correctamente"
             else

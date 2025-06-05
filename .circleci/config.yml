@@ -37,9 +37,6 @@ jobs:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
       - run:
-          name: Autenticarse en Vercel
-          command: echo "$VERCEL_TOKEN" | vercel login --token
-      - run:
           name: Desplegar a Vercel
           command: vercel --prod --token=$VERCEL_TOKEN
 

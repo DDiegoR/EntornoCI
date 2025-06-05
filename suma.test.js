@@ -1,5 +1,5 @@
 // suma.test.js
-const { sumar } = require('./suma');
+const { sumar } = require('./public/suma');
 
 test('sumar 2 + 3 es igual a 5', () => {
   expect(sumar(2, 3)).toBe(5);

@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Run test
           command: |
-            python -m pytest
+            npm test
             RESULT=$?
               if [ $RESULT -eq 0 ]; then
                 STATUS="✅ Tests pasaron correctamente"

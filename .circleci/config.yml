@@ -41,7 +41,7 @@ jobs:
           command: echo "$VERCEL_TOKEN" | vercel login --token
       - run:
           name: Desplegar a Vercel
-          command: vercel --prod --token $VERCEL_TOKEN
+          command: vercel --prod --token=$VERCEL_TOKEN
 
 workflows:
   version: 2

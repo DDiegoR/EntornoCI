@@ -18,15 +18,15 @@ jobs:
           command: |
             npm test
             RESULT=$?
-              if [ $RESULT -eq 0 ]; then
-                STATUS="✅ Tests pasaron correctamente"
-              else
-                STATUS="❌ Tests fallaron"
-              fi
-              curl -X POST -H 'Content-type: application/json' \
-                --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
-                $SLACK_WEBHOOK_URL
-              exit $RESULT  # devolver el estado correcto a CircleCI
+            if [ $RESULT -eq 0 ]; then
+              STATUS="✅ Tests pasaron correctamente"
+            else
+              STATUS="❌ Tests fallaron"
+            fi
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
+              $SLACK_WEBHOOK_URL
+            exit $RESULT  # devolver el estado correcto a CircleCI
 
   deploy:
     docker:

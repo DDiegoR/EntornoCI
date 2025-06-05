@@ -14,7 +14,7 @@ jobs:
           command: npm install
 
       - run:
-          name: Run test
+          name: Ejecutar test
           command: |
             npm test
             RESULT=$?
@@ -27,12 +27,8 @@ jobs:
                 --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
                 $SLACK_WEBHOOK_URL
               exit $RESULT  # devolver el estado correcto a CircleCI
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - .
 
-  preview_deployment:
+  deploy:
     docker:
       - image: cimg/node:24.1.0
     steps:
@@ -40,48 +36,19 @@ jobs:
       - run:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
-
       - run:
-          name: Pull Vercel Environment Information
-          command: vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
+          name: Autenticarse en Vercel
+          command: echo "$VERCEL_TOKEN" | vercel login --token
       - run:
-          name: Build Project Artifacts
-          command: vercel build --token=$VERCEL_TOKEN
-      - run:
-          name: Deploy Project Artifacts to Vercel
-          command: vercel deploy --prebuilt --token=$VERCEL_TOKEN
-
-  production_deployment:
-    docker:
-      - image: cimg/node:24.1.0
-    steps:
-      - checkout
-      - run:
-          name: Install Vercel CLI
-          command: sudo npm install --global vercel@latest
-
-      - run:
-          name: Pull Vercel Environment Information
-          command: vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-      - run:
-          name: Build Project Artifacts
-          command: vercel build --prod --token=$VERCEL_TOKEN
-      - run:
-          name: Deploy Project Artifacts to Vercel
-          command: vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+          name: Desplegar a Vercel
+          command: vercel --prod --token $VERCEL_TOKEN
 
 workflows:
   version: 2
   build_test:
     jobs:
       - build_and_test
-      - preview_deployment: #The preview_deployment job will run when your code is pushed to a git branch other than main
-          requires: 
-            - build_and_test
-          filters:
-            branches:
-              ignore: /main/
-      - production_deployment: #the production_deployment job will run when code is merged into the main branch.
+      - deploy:
           requires: 
             - build_and_test
           filters:

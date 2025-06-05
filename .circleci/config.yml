@@ -29,6 +29,37 @@ jobs:
               --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
               $SLACK_WEBHOOK_URL
             exit $RESULT  # devolver el estado correcto a CircleCI
+      
+      - run:
+          name: Mover tarjeta de Trello a "Completado"
+          command: |
+            COMMIT_MSG=$(git log -1 --pretty=%B)
+            echo "Último commit: $COMMIT_MSG"
+
+            # Buscar ID de tarjeta (ej: TRELLO-abc123)
+            CARD_ID=$(echo "$COMMIT_MSG" | grep -oE 'TRELLO-[a-zA-Z0-9]+')
+
+            if [ -n "$CARD_ID" ]; then
+              echo "Encontrado ID de tarjeta: $CARD_ID"
+
+              # Buscar la tarjeta real en Trello por nombre corto (necesita ajustes si hay múltiples)
+              CARD_JSON=$(curl -s \
+                "https://api.trello.com/1/search?query=$CARD_ID&key=$TRELLO_API_KEY&token=$TRELLO_TOKEN&modelTypes=cards&cards_limit=1")
+
+              CARD_REAL_ID=$(echo "$CARD_JSON" | jq -r '.cards[0].id')
+
+              if [ "$CARD_REAL_ID" != "null" ]; then
+                echo "Moviendo tarjeta $CARD_ID a lista Completado..."
+                curl -X PUT "https://api.trello.com/1/cards/$CARD_REAL_ID" \
+                  -d "idList=$TRELLO_DONE_LIST_ID" \
+                  -d "key=$TRELLO_API_KEY" \
+                  -d "token=$TRELLO_TOKEN"
+              else
+                echo "❌ No se pudo encontrar la tarjeta con ID $CARD_ID en Trello"
+              fi
+            else
+              echo "⚠️ No se encontró ningún ID de tarjeta Trello en el commit"
+            fi
 
   deploy:
     docker:

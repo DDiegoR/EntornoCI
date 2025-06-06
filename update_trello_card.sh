@@ -7,7 +7,7 @@ if [ -z "$TRELLO_API_KEY" ] || [ -z "$TRELLO_TOKEN" ]; then
 fi
 
 # Variables de CircleCI (disponibles automáticamente)
-COMMIT_MESSAGE=$(git log -1 --pretty=%B) # Mensaje del último commit
+COMMIT_MESSAGE=$(git log -1 --pretty=%B) # Mensaje del último commit.
 COMMIT_SHA=$CIRCLE_SHA1                  # SHA del commit
 REPO_URL=$CIRCLE_REPOSITORY_URL          # URL del repositorio
 BUILD_URL=$CIRCLE_BUILD_URL              # URL del build de CircleCI

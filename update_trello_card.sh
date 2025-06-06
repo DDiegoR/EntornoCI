@@ -55,7 +55,7 @@ curl --request PUT \
 if [ $? -eq 0 ]; then
   echo "Tarjeta de Trello movida con éxito a la lista de completados."
   # Opcional: Añadir un comentario a la tarjeta después de moverla
-  # Esto es útil para dejar un rastro de por qué se movió la tarjeta.
+  # Esto es útil para dejar un rastro de por qué se movió la tarjeta..
   COMMENT="Tarjeta movida a 'Completados' por un commit en CircleCI.
   Mensaje del commit: \`$COMMIT_MSG\`
   Build: $BUILD_URL"

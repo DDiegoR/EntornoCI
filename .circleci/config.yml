@@ -42,6 +42,17 @@ jobs:
           name: Desplegar a Vercel
           command: vercel --prod --token=$VERCEL_TOKEN
 
+  update-trello-card:
+      docker:
+        - image: cimg/base:2023.03 # Una imagen base con curl y git
+      steps:
+        - checkout # Clona tu repositorio para acceder al script
+        - run:
+            name: Ejecutar script de Trello
+            command: |
+              chmod +x ./update_trello_card.sh # Asegura que el script sea ejecutable
+              ./update_trello_card.sh
+
 workflows:
   version: 2
   build_test:
@@ -53,3 +64,7 @@ workflows:
           filters:
             branches:
               only: /main/
+      - update-trello-card:
+          requires: 
+            - build_and_test
+            - deploy

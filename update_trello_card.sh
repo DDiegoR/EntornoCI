@@ -40,6 +40,9 @@ TRELLO_COMPLETED_LIST_ID="684203e2005b352a3c6dccaf"
 # Variables de CircleCI para el mensaje (opcional, pero útil para contextualizar)
 BUILD_URL=$CIRCLE_BUILD_URL              # URL del build de CircleCI
 
+TRELLO_CARD_ID="${CARD_ID#TRELLO-}"
+
+echo "DEBUG: ID de tarjeta de Trello extraído y a usar: $TRELLO_CARD_ID" 
 echo "Intentando mover la tarjeta de Trello con ID: $TRELLO_CARD_ID"
 echo "A la lista con ID: $TRELLO_COMPLETED_LIST_ID"
 

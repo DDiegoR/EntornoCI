@@ -12,7 +12,7 @@ COMMIT_MSG=$(git log -1 --pretty=%B)
 CARD_ID=$(echo "$COMMIT_MSG" | grep -oE 'TRELLO-[a-zA-Z0-9]+')
 if [ -n "$CARD_ID" ]; then
     echo "Encontrado ID de tarjeta: $CARD_ID"
-    TRELLO_CARD_ID="$CARD_ID"
+    TRELLO_CARD_ID="${CARD_ID#TRELLO-}"
 fi
 # Buscar la tarjeta real en Trello por nombre corto (necesita ajustes si hay múltiples)
 
@@ -40,7 +40,7 @@ TRELLO_COMPLETED_LIST_ID="684203e2005b352a3c6dccaf"
 # Variables de CircleCI para el mensaje (opcional, pero útil para contextualizar)
 BUILD_URL=$CIRCLE_BUILD_URL              # URL del build de CircleCI
 
-TRELLO_CARD_ID="${CARD_ID#TRELLO-}"
+
 
 echo "DEBUG: ID de tarjeta de Trello extraído y a usar: $TRELLO_CARD_ID" 
 echo "Intentando mover la tarjeta de Trello con ID: $TRELLO_CARD_ID"

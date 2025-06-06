@@ -48,6 +48,11 @@ jobs:
     steps:
       - checkout # Clona tu repositorio
       - run:
+          name: Instalar jq
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y jq
+      - run:
           name: Mover tarjeta de Trello a completados
           command: |
             chmod +x ./update_trello_card.sh # Asegura que el script sea ejecutable

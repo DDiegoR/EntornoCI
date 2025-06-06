@@ -60,16 +60,14 @@ if [ $? -eq 0 ]; then
   # Opcional: Añadir un comentario a la tarjeta después de moverla
   # Esto es útil para dejar un rastro de por qué se movió la tarjeta..
   COMMENT="Tarjeta movida a 'Completados' por un commit en CircleCI.
-  Mensaje del commit: \`$COMMIT_MSG\`
+  Mensaje del commit: $COMMIT_MSG
   Build: $BUILD_URL"
 
   curl --request POST \
     --url "https://api.trello.com/1/cards/$TRELLO_CARD_ID/actions/comments?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" \
     --header 'Accept: application/json' \
     --header 'Content-Type: application/json' \
-    --data "{
-      \"text\": \"$COMMENT\"
-    }"
+    --data "$(jq -n --arg text "$COMMENT" '{text: $text}')"
   if [ $? -eq 0 ]; then
     echo "Comentario añadido a la tarjeta movida."
   else

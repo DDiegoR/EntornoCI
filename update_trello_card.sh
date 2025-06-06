@@ -12,7 +12,7 @@ COMMIT_MSG=$(git log -1 --pretty=%B)
 CARD_ID=$(echo "$COMMIT_MSG" | grep -oE 'TRELLO-[a-zA-Z0-9]+')
 if [ -n "$CARD_ID" ]; then
     echo "Encontrado ID de tarjeta: $CARD_ID"
-    TRELLO_CARD_ID=$CARD_ID
+    TRELLO_CARD_ID="$CARD_ID"
 fi
 # Buscar la tarjeta real en Trello por nombre corto (necesita ajustes si hay múltiples)
 

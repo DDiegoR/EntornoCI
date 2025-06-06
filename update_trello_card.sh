@@ -12,6 +12,7 @@ COMMIT_MSG=$(git log -1 --pretty=%B)
 CARD_ID=$(echo "$COMMIT_MSG" | grep -oE 'TRELLO-[a-zA-Z0-9]+')
 if [ -n "$CARD_ID" ]; then
     echo "Encontrado ID de tarjeta: $CARD_ID"
+    TRELLO_CARD_ID=$CARD_ID
 
 # Buscar la tarjeta real en Trello por nombre corto (necesita ajustes si hay múltiples)
 
@@ -25,7 +26,7 @@ if [ -n "$CARD_ID" ]; then
 # el ID de la tarjeta es ABCDE123
 #
 # ¡IMPORTANTE: Reemplaza "TU_ID_DE_TARJETA_TRELLO" con el ID de la tarjeta que quieres mover!
-TRELLO_CARD_ID= "$CARD_ID"
+#TRELLO_CARD_ID=$CARD_ID
 
 # ID de la lista "Completados" (o la lista a la que quieres mover la tarjeta)
 # Para obtener el ID de una lista:
@@ -34,7 +35,7 @@ TRELLO_CARD_ID= "$CARD_ID"
 # 3. Busca el nombre de tu lista "Completados" (o el que uses) y ahí encontrarás su "id".
 #
 # ¡IMPORTANTE: Reemplaza "TU_ID_DE_LISTA_COMPLETADOS" con el ID de tu lista de completados!
-TRELLO_COMPLETED_LIST_ID= "684203e2005b352a3c6dccaf"
+TRELLO_COMPLETED_LIST_ID="684203e2005b352a3c6dccaf"
 
 # Variables de CircleCI para el mensaje (opcional, pero útil para contextualizar)
 BUILD_URL=$CIRCLE_BUILD_URL              # URL del build de CircleCI
@@ -56,7 +57,7 @@ if [ $? -eq 0 ]; then
   # Opcional: Añadir un comentario a la tarjeta después de moverla
   # Esto es útil para dejar un rastro de por qué se movió la tarjeta.
   COMMENT="Tarjeta movida a 'Completados' por un commit en CircleCI.
-  Mensaje del commit: \`$COMMIT_MESSAGE\`
+  Mensaje del commit: \`$COMMIT_MSG\`
   Build: $BUILD_URL"
 
   curl --request POST \

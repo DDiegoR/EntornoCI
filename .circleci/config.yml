@@ -1,14 +1,14 @@
-version: 2.1  # is the latest CircleCI version
+version: 2.1
 
 orbs:
   slack: circleci/slack@5.1.1
 
 jobs:
-  build_and_test: # this can be any name you choose
+  build_and_test:
     docker:
       - image: cimg/node:18.20.2
     steps:
-      - checkout # checkout source code
+      - checkout
       - run:
           name: Instalar dependencias
           command: npm install
@@ -21,9 +21,9 @@ jobs:
             RESULT=$?
             set -e
             if [ $RESULT -eq 0 ]; then
-              STATUS="✅ Tests pasaron correctamente"
+              STATUS="✅ Los tests pasaron correctamente"
             else
-              STATUS="❌ Tests fallaron"
+              STATUS="❌ Los tests fallaron"
             fi
             curl -X POST -H 'Content-type: application/json' \
               --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
@@ -36,7 +36,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Vercel CLI
+          name: Instalar Vercel CLI
           command: sudo npm install --global vercel@latest
       - run:
           name: Desplegar a Vercel
@@ -44,9 +44,9 @@ jobs:
 
   update-trello-card:
     docker:
-      - image: cimg/base:2023.03 # O cualquier imagen que contenga curl y git
+      - image: cimg/base:2023.03
     steps:
-      - checkout # Clona tu repositorio
+      - checkout
       - run:
           name: Instalar jq
           command: |
@@ -55,7 +55,7 @@ jobs:
       - run:
           name: Mover tarjeta de Trello a completados
           command: |
-            chmod +x ./update_trello_card.sh # Asegura que el script sea ejecutable
+            chmod +x ./update_trello_card.sh
             ./update_trello_card.sh
 
 workflows:

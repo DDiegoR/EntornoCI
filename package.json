@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "test": "jest",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
@@ -10,8 +11,5 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "vite": "^6.3.5"
-  },
-  "scripts": {
-    "test": "jest"
   }
 }

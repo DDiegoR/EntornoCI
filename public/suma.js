@@ -1,15 +1,14 @@
+// Esta funcion no verifica nada
 /*
 function sumar(a, b) {
   return a + b;
 }
 */
+
+// Esta funcion verifica los caracteres no numéricos
 function sumar(a, b) {
   const numA = Number(a);
   const numB = Number(b);
-
-  if (isNaN(numA) || isNaN(numB)) {
-    return NaN;  // o lanzar un error
-  }
 
   return numA + numB;
 }
@@ -26,7 +25,6 @@ if (typeof document !== 'undefined') {
       const a = parseFloat(inputA.value);
       const b = parseFloat(inputB.value);
 
-      // Validación básica
       if (isNaN(a) || isNaN(b)) {
         resultado.textContent = 'Por favor, ingresa números válidos.';
         return;

@@ -3,12 +3,13 @@ function sumar(a, b) {
   return a + b;
 }
 */
+
 function sumar(a, b) {
   const numA = Number(a);
   const numB = Number(b);
 
   if (isNaN(numA) || isNaN(numB)) {
-    return NaN;  // o lanzar un error
+    return NaN;
   }
 
   return numA + numB;

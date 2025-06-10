@@ -26,7 +26,7 @@ jobs:
               STATUS="❌ Los Tests fallaron"
             fi
             curl -X POST -H 'Content-type: application/json' \
-              --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \
+              --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH) por @$CIRCLE_USERNAME\"}" \
               $SLACK_WEBHOOK_URL
             exit $RESULT  # devolver el estado correcto a CircleCI
 

@@ -12,7 +12,11 @@ jobs:
       - run:
           name: Instalar dependencias
           command: npm install
-
+      - run:
+          name: Get Git Author
+          command: |
+            export GIT_AUTHOR_NAME=$(git log -1 --pretty=format:'%an' $CIRCLE_SHA1)
+            echo 'export GIT_AUTHOR_NAME="'$GIT_AUTHOR_NAME'"' >> $BASH_ENV
       - run:
           name: Ejecutar test
           command: |
@@ -26,7 +30,7 @@ jobs:
               STATUS="❌ Los Tests fallaron"
             fi
             curl -X POST -H 'Content-type: application/json' \
-              --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH) por @$CIRCLE_USERNAME\"}" \
+              --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH) por "$GIT_AUTHOR_NAME"\"}" \
               $SLACK_WEBHOOK_URL
             exit $RESULT  # devolver el estado correcto a CircleCI
 

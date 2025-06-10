@@ -21,9 +21,9 @@ jobs:
             RESULT=$?
             set -e
             if [ $RESULT -eq 0 ]; then
-              STATUS="✅ Tests pasaron correctamente"
+              STATUS="✅ Los Tests pasaron correctamente"
             else
-              STATUS="❌ Tests fallaron"
+              STATUS="❌ Los Tests fallaron"
             fi
             curl -X POST -H 'Content-type: application/json' \
               --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH)\"}" \

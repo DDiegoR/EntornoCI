@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   slack: circleci/slack@5.1.1
+  sonarcloud: sonarsource/sonarcloud@3.0.0
 
 jobs:
   build_and_test:
@@ -33,6 +34,20 @@ jobs:
               --data "{\"text\":\"$STATUS en el proyecto *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH) por "$GIT_AUTHOR_NAME"\"}" \
               $SLACK_WEBHOOK_URL
             exit $RESULT  # devolver el estado correcto a CircleCI
+        
+        # Paso para ejecutar el análisis de SonarCloud
+      - sonarcloud/scan:
+          # El nombre de la variable de entorno donde se almacena el token de SonarCloud
+          sonar_token_variable_name: SONAR_TOKEN
+          # Clave de tu proyecto en SonarCloud (la puedes encontrar en la configuración de tu proyecto en SonarCloud)
+          project_key: DDiegoR_EntornoCI
+          # Opcional: Define la rama principal de tu repositorio
+          default_branch: main
+          raw_scanner_args: -Dsonar.qualitygate.wait=true
+          # Opcional: Si es un Pull Request, especifica el proveedor
+          # pr_provider: GitHub # O Bitbucket, GitLab, Azure DevOps, etc.
+          # Opcional: Argumentos adicionales para el SonarScanner
+          # raw_scanner_args: -Dsonar.language=javascript -Dsonar.sources=.
 
   deploy:
     docker:
@@ -77,7 +92,8 @@ workflows:
   version: 2
   build_test:
     jobs:
-      - build_and_test
+      - build_and_test:
+        context: sonarcloud
       - deploy:
           requires: 
             - build_and_test

@@ -45,6 +45,12 @@ jobs:
       - run:
           name: Desplegar a Vercel
           command: vercel --prod --token=$VERCEL_TOKEN
+      - run:
+          name: Notificar despliegue exitoso en Slack
+          command: |
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{\"text\":\"✅ Despliegue exitoso en Vercel para *$CIRCLE_PROJECT_REPONAME* (branch: $CIRCLE_BRANCH) por $GIT_AUTHOR_NAME\"}" \
+              $SLACK_WEBHOOK_URL
 
   update-trello-card:
     docker:

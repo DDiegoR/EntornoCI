@@ -35,7 +35,7 @@ jobs:
               $SLACK_WEBHOOK_URL
             exit $RESULT  # devolver el estado correcto a CircleCI
         
-        # Paso para ejecutar el análisis de SonarCloud
+        # Paso para ejecutar el análisis de SonarCloud.
       - sonarcloud/scan:
           # El nombre de la variable de entorno donde se almacena el token de SonarCloud
           sonar_token_variable_name: SONAR_TOKEN

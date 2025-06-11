@@ -46,6 +46,11 @@ jobs:
           name: Desplegar a Vercel
           command: vercel --prod --token=$VERCEL_TOKEN
       - run:
+          name: Get Git Author
+          command: |
+            export GIT_AUTHOR_NAME=$(git log -1 --pretty=format:'%an' $CIRCLE_SHA1)
+            echo 'export GIT_AUTHOR_NAME="'$GIT_AUTHOR_NAME'"' >> $BASH_ENV
+      - run:
           name: Notificar despliegue exitoso en Slack
           command: |
             curl -X POST -H 'Content-type: application/json' \

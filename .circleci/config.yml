@@ -39,15 +39,10 @@ jobs:
       - sonarcloud/scan:
           # El nombre de la variable de entorno donde se almacena el token de SonarCloud
           sonar_token_variable_name: SONAR_TOKEN
-          # Clave de tu proyecto en SonarCloud (la puedes encontrar en la configuración de tu proyecto en SonarCloud)
-          project_key: DDiegoR_EntornoCI
-          # Opcional: Define la rama principal de tu repositorio
-          default_branch: main
-          raw_scanner_args: -Dsonar.qualitygate.wait=true
-          # Opcional: Si es un Pull Request, especifica el proveedor
-          # pr_provider: GitHub # O Bitbucket, GitLab, Azure DevOps, etc.
-          # Opcional: Argumentos adicionales para el SonarScanner
-          # raw_scanner_args: -Dsonar.language=javascript -Dsonar.sources=.
+          args: >
+            -Dsonar.projectKey=DDiegoR_EntornoCI
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.branch.name=${CIRCLE_BRANCH}
 
   deploy:
     docker:

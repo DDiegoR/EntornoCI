@@ -35,14 +35,8 @@ jobs:
               $SLACK_WEBHOOK_URL
             exit $RESULT  # devolver el estado correcto a CircleCI
         
-        # Paso para ejecutar el análisis de SonarCloud.
-      - sonarcloud/scan:
-          # El nombre de la variable de entorno donde se almacena el token de SonarCloud
-          sonar_token_variable_name: SONAR_TOKEN
-          args: >
-            -Dsonar.projectKey=DDiegoR_EntornoCI
-            -Dsonar.qualitygate.wait=true
-            -Dsonar.branch.name=${CIRCLE_BRANCH}
+      - sonarcloud/scan
+
 
   deploy:
     docker:
@@ -88,7 +82,6 @@ workflows:
   build_test:
     jobs:
       - build_and_test:
-          context: sonarcloud
       - deploy:
           requires: 
             - build_and_test

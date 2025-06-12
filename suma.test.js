@@ -13,11 +13,11 @@ test('sumar con cero', () => {
   expect(sumar(0, 7)).toBe(7);
 });
 
-/*
+
 test('falla intencional', () => {
   expect(1).toBe(2);  // Esto falla
 });
-*/
+
 
 test('no debe permitir letras como entrada', () => {
   expect(sumar("a", "3")).toBeNaN();

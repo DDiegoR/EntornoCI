@@ -27,7 +27,7 @@ if (typeof document !== 'undefined') {
       const a = parseFloat(inputA.value);
       const b = parseFloat(inputB.value);
 /*
-      // Validación básica
+      // Validación básica.
       if (isNaN(a) || isNaN(b)) {
         resultado.textContent = 'Por favor, ingresa números válidos.';
         return;

@@ -1,9 +1,9 @@
-/*
+
 function sumar(a, b) {
   return a + b;
 }
-*/
 
+/*
 function sumar(a, b) {
   const numA = Number(a);
   const numB = Number(b);
@@ -14,7 +14,7 @@ function sumar(a, b) {
 
   return numA + numB;
 }
-
+*/
 
 if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', function () {
@@ -26,13 +26,13 @@ if (typeof document !== 'undefined') {
     boton.addEventListener('click', function () {
       const a = parseFloat(inputA.value);
       const b = parseFloat(inputB.value);
-
-      // Validación básica
+/*
+      // Validación básica.
       if (isNaN(a) || isNaN(b)) {
         resultado.textContent = 'Por favor, ingresa números válidos.';
         return;
       }
-
+*/
       const suma = sumar(a, b);
       resultado.textContent = `Resultado: ${suma}`;
     });

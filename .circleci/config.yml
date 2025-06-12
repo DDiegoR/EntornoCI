@@ -85,6 +85,9 @@ workflows:
       - deploy:
           requires: 
             - build_and_test
+          filters:
+            branches:
+              only: /main/
       - update-trello-card:
           requires: 
             - build_and_test
